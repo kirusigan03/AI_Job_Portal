@@ -1,0 +1,142 @@
+# Brings up the entire stack in containers, on top of the infra defined
+# in docker-compose.yml (postgres + kafka).
+#
+# Build every service's jar first, then run both files together:
+#
+#   for d in eureka-server config-server api-gateway auth-service user-service \
+#            job-service application-service resume-service notification-service ai-service; do
+#     mvn -f "$d/pom.xml" clean package -DskipTests
+#   done
+#
+#   docker compose -f docker-compose.yml -f docker-compose.full.yml up -d
+#
+# Startup order matters (config-server -> eureka -> everything else),
+# hence the depends_on chain below.
+
+services:
+
+  eureka-server:
+    build: ./eureka-server
+    container_name: smartjob-eureka
+    ports:
+      - "8761:8761"
+
+  config-server:
+    build: ./config-server
+    container_name: smartjob-config-server
+    ports:
+      - "8888:8888"
+    depends_on:
+      - eureka-server
+
+  auth-service:
+    build: ./auth-service
+    container_name: smartjob-auth-service
+    environment:
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+    depends_on:
+      config-server:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+
+  user-service:
+    build: ./user-service
+    container_name: smartjob-user-service
+    environment:
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      INTERNAL_SERVICE_KEY: ${INTERNAL_SERVICE_KEY}
+    depends_on:
+      config-server:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+
+  job-service:
+    build: ./job-service
+    container_name: smartjob-job-service
+    environment:
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      INTERNAL_SERVICE_KEY: ${INTERNAL_SERVICE_KEY}
+    depends_on:
+      config-server:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+
+  resume-service:
+    build: ./resume-service
+    container_name: smartjob-resume-service
+    environment:
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      INTERNAL_SERVICE_KEY: ${INTERNAL_SERVICE_KEY}
+    volumes:
+      - resume_uploads:/app/uploads/resumes
+    depends_on:
+      config-server:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+
+  application-service:
+    build: ./application-service
+    container_name: smartjob-application-service
+    environment:
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+    depends_on:
+      config-server:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+
+  ai-service:
+    build: ./ai-service
+    container_name: smartjob-ai-service
+    environment:
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      INTERNAL_SERVICE_KEY: ${INTERNAL_SERVICE_KEY}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+    depends_on:
+      config-server:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+
+  notification-service:
+    build: ./notification-service
+    container_name: smartjob-notification-service
+    environment:
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      INTERNAL_SERVICE_KEY: ${INTERNAL_SERVICE_KEY}
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+    depends_on:
+      config-server:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: smartjob-api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka-server
+      - config-server
+
+volumes:
+  resume_uploads:

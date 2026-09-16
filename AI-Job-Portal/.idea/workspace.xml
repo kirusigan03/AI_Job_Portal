@@ -4,27 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e2f01fef-e315-48c1-9300-3a82baf5f886" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/AI-Job-Portal.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/config-server/.gitattributes" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/config-server/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/config-server/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/config-server/mvnw" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/config-server/mvnw.cmd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/config-server/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/config-server/src/main/java/com/smartjob/configserver/ConfigServerApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/config-server/src/main/resources/application.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/config-server/src/main/resources/config/auth-service.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/config-server/src/main/resources/config/test-service.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/config-server/src/test/java/com/smartjob/configserver/ConfigServerApplicationTests.java" afterDir="false" />
-    </list>
+    <list default="true" id="e2f01fef-e315-48c1-9300-3a82baf5f886" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -35,6 +15,13 @@
       <entry key="_C:/Users/DELL/Desktop/AI-Job-Portal" value="3J8dWIBWez0CAigtTW4tEsUxvBl" />
       <entry key="_C:/Users/DELL/Desktop/Jop-portal/AI-Job-Portal" value="3JDmgArahIMmk9oFn2cJvgc28dw" />
     </persistenceIdMap>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -50,11 +37,19 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.AiServiceApplication.executor": "Run",
+    "Application.ApiGatewayApplication.executor": "Run",
+    "Application.ApplicationServiceApplication.executor": "Run",
     "Application.AuthServiceApplication.executor": "Run",
     "Application.ConfigServerApplication.executor": "Run",
+    "Application.EurekaServerApplication.executor": "Run",
+    "Application.JobServiceApplication.executor": "Run",
+    "Application.NotificationServiceApplication.executor": "Run",
+    "Application.ResumeServiceApplication.executor": "Run",
+    "Application.UserServiceApplication.executor": "Run",
+    "Application.com.smartjob.auth_service.AuthServiceApplication.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/DELL/Desktop/Jop-portal/AI-Job-Portal",
     "project.structure.last.edited": "Project",
@@ -62,6 +57,34 @@
     "project.structure.side.proportion": "0.0"
   }
 }]]></component>
+  <component name="RunManager">
+    <configuration name="AuthServiceApplication" type="Application" factoryName="Application" activateToolWindowBeforeRun="false">
+      <envs>
+        <env name="DB_PASSWORD" value="Kiru@2003" />
+        <env name="JWT_SECRET" value="SmartJobPortalSecretKeyForJWTAuthentication2026VerySecure" />
+      </envs>
+      <option name="MAIN_CLASS_NAME" value="com.smartjob.auth_service.AuthServiceApplication" />
+      <module name="auth-service" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="UserServiceApplication" type="Application" factoryName="Application">
+      <envs>
+        <env name="DB_PASSWORD" value="Kiru@2003" />
+        <env name="JWT_SECRET" value="SmartJobPortalSecretKeyForJWTAuthentication2026VerySecure" />
+      </envs>
+      <option name="MAIN_CLASS_NAME" value="com.smartjob.user_service.UserServiceApplication" />
+      <module name="user-service" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.AuthServiceApplication" />
+      <item itemvalue="Application.UserServiceApplication" />
+    </list>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">

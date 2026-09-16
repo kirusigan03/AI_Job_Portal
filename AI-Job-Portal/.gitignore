@@ -1,0 +1,17 @@
+# Local environment variables - never commit real secrets
+.env
+.env.local
+
+### Maven ###
+target/
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+
+### OS ###
+.DS_Store

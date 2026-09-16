@@ -1,0 +1,51 @@
+name: Backend CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        service:
+          - eureka-server
+          - config-server
+          - api-gateway
+          - auth-service
+          - user-service
+          - job-service
+          - application-service
+          - resume-service
+          - ai-service
+          - notification-service
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Build and test ${{ matrix.service }}
+        working-directory: ${{ matrix.service }}
+        # These are the placeholder values CI needs to let the Spring
+        # context load; real secrets stay in each developer's local .env
+        # and in whatever secret store production actually uses.
+        env:
+          DB_PASSWORD: test_password
+          JWT_SECRET: test_jwt_secret_for_ci_only_not_for_prod_1234567890
+          INTERNAL_SERVICE_KEY: test_internal_key
+          OPENAI_API_KEY: test_openai_key
+          MAIL_USERNAME: test@example.com
+          MAIL_PASSWORD: test_mail_password
+        run: mvn -B clean verify
