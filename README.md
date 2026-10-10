@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="frontend/public/favicon.svg" alt="SmartJob logo" width="88" height="88" />
+  <img src="AI-Job-Portal/frontend/public/favicon.svg" alt="SmartJob logo" width="88" height="88" />
   <h1>SmartJob — AI-Powered Job Portal</h1>
   <p>
     A role-based recruitment platform built with React and Spring Boot microservices,<br />
@@ -205,6 +205,7 @@ AI-Job-Portal/
 ```bash
 git clone https://github.com/kirusigan03/AI_Job_Portal.git
 cd AI_Job_Portal
+cd AI-Job-Portal
 cp .env.example .env
 ```
 
