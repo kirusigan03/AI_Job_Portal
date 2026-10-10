@@ -103,7 +103,7 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       JWT_SECRET: ${JWT_SECRET}
       INTERNAL_SERVICE_KEY: ${INTERNAL_SERVICE_KEY}
-      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      GROQ_API_KEY: ${GROQ_API_KEY}
     depends_on:
       config-server:
         condition: service_started

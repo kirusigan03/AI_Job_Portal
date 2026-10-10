@@ -24,9 +24,8 @@ public class Resume {
 
     private boolean primaryResume;
 
-    // A resume's extracted text can comfortably exceed a fixed
-    // varchar length, so it's stored as a large object instead.
-    @Lob
+    // Store long extracted content as PostgreSQL text, not a large-object OID.
+    @Column(columnDefinition = "text")
     private String extractedText;
 
     private LocalDateTime uploadedAt;

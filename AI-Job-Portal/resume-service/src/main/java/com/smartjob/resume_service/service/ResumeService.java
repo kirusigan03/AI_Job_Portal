@@ -40,13 +40,15 @@ public class ResumeService {
 
         String contentType = file.getContentType();
 
-        boolean isPdf = "application/pdf".equals(contentType);
+        String fileName = file.getOriginalFilename() == null ? "" : file.getOriginalFilename().toLowerCase();
+        boolean isPdf = "application/pdf".equalsIgnoreCase(contentType) || fileName.endsWith(".pdf");
         boolean isDocx = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                .equals(contentType);
+            .equalsIgnoreCase(contentType) || fileName.endsWith(".docx");
+        boolean isDoc = "application/msword".equalsIgnoreCase(contentType) || fileName.endsWith(".doc");
 
-        if (!isPdf && !isDocx) {
+        if (!isPdf && !isDocx && !isDoc) {
             throw new BadRequestException(
-                    "Only PDF and DOCX files are supported"
+                "Only PDF, DOC, and DOCX files are supported"
             );
         }
 

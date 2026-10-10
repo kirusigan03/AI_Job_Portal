@@ -1,7 +1,6 @@
 package com.smartjob.ai_service.controller;
 
 import com.smartjob.ai_service.entity.ResumeAnalysis;
-import com.smartjob.ai_service.exception.ResourceNotFoundException;
 import com.smartjob.ai_service.exception.UnauthorizedException;
 import com.smartjob.ai_service.repository.ResumeAnalysisRepository;
 import com.smartjob.ai_service.security.UserPrincipal;
@@ -12,6 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Optional;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/ai")
@@ -24,16 +26,19 @@ public class AiController {
     }
 
     @GetMapping("/applications/{applicationId}")
-    public ResponseEntity<ResumeAnalysis> getEvaluationForApplication(
+    public ResponseEntity<?> getEvaluationForApplication(
             @PathVariable Long applicationId,
             Authentication authentication
     ) {
 
         UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
 
-        ResumeAnalysis analysis = analysisRepository
-                .findByApplicationId(applicationId)
-                .orElseThrow(() -> new ResourceNotFoundException("Evaluation not found"));
+        Optional<ResumeAnalysis> storedAnalysis = analysisRepository.findByApplicationId(applicationId);
+        if (storedAnalysis.isEmpty()) {
+            return ResponseEntity.accepted()
+                    .body(Map.of("status", "PENDING", "message", "AI score is not available yet"));
+        }
+        ResumeAnalysis analysis = storedAnalysis.get();
 
         assertCanView(analysis, principal);
 
@@ -41,16 +46,20 @@ public class AiController {
     }
 
     @GetMapping("/resume/{resumeId}")
-    public ResponseEntity<ResumeAnalysis> getResumeAnalysis(
+    public ResponseEntity<?> getResumeAnalysis(
             @PathVariable Long resumeId,
             Authentication authentication
     ) {
 
         UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
 
-        ResumeAnalysis analysis = analysisRepository
-                .findFirstByResumeIdOrderByCreatedAtDesc(resumeId)
-                .orElseThrow(() -> new ResourceNotFoundException("Analysis not found"));
+        Optional<ResumeAnalysis> storedAnalysis = analysisRepository
+                .findFirstByResumeIdOrderByCreatedAtDesc(resumeId);
+        if (storedAnalysis.isEmpty()) {
+            return ResponseEntity.accepted()
+                    .body(Map.of("status", "PENDING", "message", "AI score is not available yet"));
+        }
+        ResumeAnalysis analysis = storedAnalysis.get();
 
         assertCanView(analysis, principal);
 

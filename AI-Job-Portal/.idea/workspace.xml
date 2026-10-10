@@ -4,7 +4,29 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e2f01fef-e315-48c1-9300-3a82baf5f886" name="Changes" comment="" />
+    <list default="true" id="e2f01fef-e315-48c1-9300-3a82baf5f886" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.env.example" beforeDir="false" afterPath="$PROJECT_DIR$/.env.example" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/backend-ci.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/backend-ci.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ai-service/src/main/java/com/smartjob/ai_service/config/KafkaConsumerConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/ai-service/src/main/java/com/smartjob/ai_service/config/KafkaConsumerConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ai-service/src/main/java/com/smartjob/ai_service/config/KafkaProducerConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/ai-service/src/main/java/com/smartjob/ai_service/config/KafkaProducerConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ai-service/src/main/java/com/smartjob/ai_service/config/OpenAiConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ai-service/src/main/java/com/smartjob/ai_service/controller/AiController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ai-service/src/main/java/com/smartjob/ai_service/controller/AiController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ai-service/src/main/java/com/smartjob/ai_service/entity/ResumeAnalysis.java" beforeDir="false" afterPath="$PROJECT_DIR$/ai-service/src/main/java/com/smartjob/ai_service/entity/ResumeAnalysis.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ai-service/src/main/java/com/smartjob/ai_service/service/AiAnalysisService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ai-service/src/main/java/com/smartjob/ai_service/service/AiAnalysisService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ai-service/src/main/java/com/smartjob/ai_service/service/OpenAiService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/com/smartjob/auth_service/AuthServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/com/smartjob/auth_service/AuthServiceApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config-server/src/main/resources/config/ai-service.properties" beforeDir="false" afterPath="$PROJECT_DIR$/config-server/src/main/resources/config/ai-service.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config-server/src/main/resources/config/application-service.properties" beforeDir="false" afterPath="$PROJECT_DIR$/config-server/src/main/resources/config/application-service.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.full.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.full.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/resume-service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-service/src/main/java/com/smartjob/resume_service/entity/Resume.java" beforeDir="false" afterPath="$PROJECT_DIR$/resume-service/src/main/java/com/smartjob/resume_service/entity/Resume.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-service/src/main/java/com/smartjob/resume_service/service/ResumeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/resume-service/src/main/java/com/smartjob/resume_service/service/ResumeService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resume-service/src/main/java/com/smartjob/resume_service/service/ResumeTextExtractionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/resume-service/src/main/java/com/smartjob/resume_service/service/ResumeTextExtractionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/smartjob/user_service/service/UserProfileService.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/smartjob/user_service/service/UserProfileService.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -49,41 +71,28 @@
     "Application.UserServiceApplication.executor": "Run",
     "Application.com.smartjob.auth_service.AuthServiceApplication.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/DELL/Desktop/Jop-portal/AI-Job-Portal",
+    "last_opened_file_path": "C:/Users/DELL/Desktop/Waypoint-develop",
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0"
   }
 }]]></component>
-  <component name="RunManager">
-    <configuration name="AuthServiceApplication" type="Application" factoryName="Application" activateToolWindowBeforeRun="false">
-      <envs>
-        <env name="DB_PASSWORD" value="Kiru@2003" />
-        <env name="JWT_SECRET" value="SmartJobPortalSecretKeyForJWTAuthentication2026VerySecure" />
-      </envs>
-      <option name="MAIN_CLASS_NAME" value="com.smartjob.auth_service.AuthServiceApplication" />
-      <module name="auth-service" />
+  <component name="RunManager" selected="Application.StudentClient">
+    <configuration name="StudentClient" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="StudentClient" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="UserServiceApplication" type="Application" factoryName="Application">
-      <envs>
-        <env name="DB_PASSWORD" value="Kiru@2003" />
-        <env name="JWT_SECRET" value="SmartJobPortalSecretKeyForJWTAuthentication2026VerySecure" />
-      </envs>
-      <option name="MAIN_CLASS_NAME" value="com.smartjob.user_service.UserServiceApplication" />
-      <module name="user-service" />
+    <configuration name="UniversityHelpDeskServer" type="Application" factoryName="Application" nameIsGenerated="true">
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <list>
-      <item itemvalue="Application.AuthServiceApplication" />
-      <item itemvalue="Application.UserServiceApplication" />
-    </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -95,6 +104,17 @@
       <updated>1789046667564</updated>
     </task>
     <servers />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/application-service/src/main/java/com/smartjob/application_service/ApplicationServiceApplication.java</url>
+          <line>16</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>

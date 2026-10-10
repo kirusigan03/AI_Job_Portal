@@ -27,7 +27,7 @@ public class AiAnalysisService {
     private final ResumeAnalysisRepository analysisRepository;
     private final ResumeClient resumeClient;
     private final JobClient jobClient;
-    private final OpenAiService openAiService;
+    private final GroqService groqService;
     private final AiEvaluationValidator validator;
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
@@ -35,14 +35,14 @@ public class AiAnalysisService {
             ResumeAnalysisRepository analysisRepository,
             ResumeClient resumeClient,
             JobClient jobClient,
-            OpenAiService openAiService,
+            GroqService groqService,
             AiEvaluationValidator validator,
             KafkaTemplate<String, Object> kafkaTemplate
     ) {
         this.analysisRepository = analysisRepository;
         this.resumeClient = resumeClient;
         this.jobClient = jobClient;
-        this.openAiService = openAiService;
+        this.groqService = groqService;
         this.validator = validator;
         this.kafkaTemplate = kafkaTemplate;
     }
@@ -68,15 +68,13 @@ public class AiAnalysisService {
 
         } catch (Exception e) {
 
-            // A failed AI call must never break the applicant's flow --
-            // the application itself already succeeded before this
-            // event was published. Log it and move on; the evaluation
-            // can be retried/inspected later.
             log.error(
                     "AI evaluation failed for application {}: {}",
                     event.getApplicationId(),
                     e.getMessage()
             );
+                throw new IllegalStateException(
+                    "AI evaluation failed for application " + event.getApplicationId(), e);
         }
     }
 
@@ -96,7 +94,7 @@ public class AiAnalysisService {
             throw new RuntimeException("Resume has no extracted text");
         }
 
-        AiEvaluationResponse aiResult = openAiService.evaluateCandidate(
+        AiEvaluationResponse aiResult = groqService.evaluateCandidate(
                 resume.getExtractedText(),
                 job.getTitle(),
                 job.getDescription(),

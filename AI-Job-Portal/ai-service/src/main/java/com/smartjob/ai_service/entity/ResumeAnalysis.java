@@ -30,16 +30,16 @@ public class ResumeAnalysis {
 
     private String recommendation;
 
-    @Lob
+    @Column(columnDefinition = "text")
     private String extractedSkills;
 
-    @Lob
+    @Column(columnDefinition = "text")
     private String matchedSkills;
 
-    @Lob
+    @Column(columnDefinition = "text")
     private String missingSkills;
 
-    @Lob
+    @Column(columnDefinition = "text")
     private String reasoning;
 
     private LocalDateTime createdAt;

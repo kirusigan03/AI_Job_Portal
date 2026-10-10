@@ -45,7 +45,7 @@ jobs:
           DB_PASSWORD: test_password
           JWT_SECRET: test_jwt_secret_for_ci_only_not_for_prod_1234567890
           INTERNAL_SERVICE_KEY: test_internal_key
-          OPENAI_API_KEY: test_openai_key
+          GROQ_API_KEY: test_groq_key
           MAIL_USERNAME: test@example.com
           MAIL_PASSWORD: test_mail_password
         run: mvn -B clean verify

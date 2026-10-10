@@ -4,6 +4,7 @@ import com.smartjob.user_service.dto.CreateProfileRequest;
 import com.smartjob.user_service.dto.UpdateProfileRequest;
 import com.smartjob.user_service.entity.UserProfile;
 import com.smartjob.user_service.exception.DuplicateProfileException;
+import com.smartjob.user_service.exception.ResourceNotFoundException;
 import com.smartjob.user_service.repository.UserProfileRepository;
 import org.springframework.stereotype.Service;
 
@@ -56,7 +57,7 @@ public class UserProfileService {
         return userProfileRepository
                 .findByUserId(userId)
                 .orElseThrow(() ->
-                        new RuntimeException(
+                        new ResourceNotFoundException(
                                 "Profile not found"
                         )
                 );

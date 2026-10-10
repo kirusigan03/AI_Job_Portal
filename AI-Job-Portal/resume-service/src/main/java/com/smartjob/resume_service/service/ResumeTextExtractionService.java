@@ -4,6 +4,8 @@ import com.smartjob.resume_service.exception.BadRequestException;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.apache.poi.hwpf.HWPFDocument;
+import org.apache.poi.hwpf.extractor.WordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,9 @@ public class ResumeTextExtractionService {
                 && contentType.contains("wordprocessingml.document"))
                 || filePath.toLowerCase().endsWith(".docx");
 
+        boolean looksLikeDoc = "application/msword".equalsIgnoreCase(contentType)
+            || filePath.toLowerCase().endsWith(".doc");
+
         try {
 
             if (looksLikePdf) {
@@ -31,6 +36,10 @@ public class ResumeTextExtractionService {
 
             if (looksLikeDocx) {
                 return extractDocx(filePath);
+            }
+
+            if (looksLikeDoc) {
+                return extractDoc(filePath);
             }
 
         } catch (IOException e) {
@@ -67,6 +76,16 @@ public class ResumeTextExtractionService {
                                     text.append(cell.getText()).append(" "))));
 
             return text.toString();
+        }
+    }
+
+    private String extractDoc(String filePath) throws IOException {
+
+        try (FileInputStream inputStream = new FileInputStream(filePath);
+             HWPFDocument document = new HWPFDocument(inputStream);
+             WordExtractor extractor = new WordExtractor(document)) {
+
+            return extractor.getText();
         }
     }
 }
