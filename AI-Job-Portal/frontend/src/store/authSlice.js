@@ -35,6 +35,7 @@ const stored = readStoredSession()
 const initialState = {
   token: stored?.token || null,
   userId: stored?.userId || null,
+  username: stored?.username || stored?.email?.split('@')[0] || null,
   email: stored?.email || null,
   role: stored?.role || null,
   profile: null,
@@ -92,6 +93,7 @@ const authSlice = createSlice({
     logout(state) {
       state.token = null
       state.userId = null
+      state.username = null
       state.email = null
       state.role = null
       state.profile = null
@@ -116,13 +118,14 @@ const authSlice = createSlice({
         state.error = null
       })
       .addCase(login.fulfilled, (state, action) => {
-        const { token, userId, email, role } = action.payload
+        const { token, userId, email, username, role } = action.payload
         state.status = 'succeeded'
         state.token = token
         state.userId = userId
+        state.username = username || email?.split('@')[0] || null
         state.email = email
         state.role = role
-        writeStoredSession({ token, userId, email, role })
+        writeStoredSession({ token, userId, email, username: state.username, role })
       })
       .addCase(login.rejected, (state, action) => {
         state.status = 'failed'

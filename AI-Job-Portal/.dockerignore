@@ -1,0 +1,7 @@
+.git
+.idea
+.env
+frontend/node_modules
+frontend/dist
+uploads
+*.log

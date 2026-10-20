@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { AlertCircle, ArrowLeft, Briefcase, Search, ShieldCheck } from 'lucide-react'
+import { AlertCircle, ArrowLeft, Briefcase, Search } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -25,12 +25,6 @@ const ROLE_OPTIONS = [
     description: 'Post jobs and review ranked candidates.',
     icon: Briefcase,
   },
-  {
-    value: ROLES.ADMIN,
-    label: 'Administrator',
-    description: 'Manage users, jobs, and platform activity.',
-    icon: ShieldCheck,
-  },
 ]
 
 export default function Register() {
@@ -42,6 +36,7 @@ export default function Register() {
   const { registerStatus, registerError } = useSelector((state) => state.auth)
 
   const [form, setForm] = useState({
+    username: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -54,6 +49,7 @@ export default function Register() {
   }, [dispatch])
 
   const emailInvalid = touched && !/^\S+@\S+\.\S+$/.test(form.email)
+  const usernameInvalid = touched && !form.username.trim()
   const passwordInvalid = touched && form.password.length < 6
   const confirmInvalid = touched && form.confirmPassword !== form.password
 
@@ -62,6 +58,7 @@ export default function Register() {
     setTouched(true)
 
     if (
+      !form.username.trim() ||
       !/^\S+@\S+\.\S+$/.test(form.email) ||
       form.password.length < 6 ||
       form.confirmPassword !== form.password
@@ -70,7 +67,12 @@ export default function Register() {
     }
 
     const result = await dispatch(
-      register({ email: form.email, password: form.password, role: form.role }),
+      register({
+        username: form.username.trim(),
+        email: form.email,
+        password: form.password,
+        role: form.role,
+      }),
     )
 
     if (!register.fulfilled.match(result)) return
@@ -170,6 +172,24 @@ export default function Register() {
                   })}
                 </div>
               </fieldset>
+
+              <div>
+                <Label htmlFor="reg-username" className="mb-1.5" required>
+                  Username
+                </Label>
+                <Input
+                  id="reg-username"
+                  type="text"
+                  autoComplete="username"
+                  value={form.username}
+                  invalid={usernameInvalid}
+                  onChange={(e) => setForm({ ...form, username: e.target.value })}
+                  placeholder="Choose a username"
+                />
+                {usernameInvalid && (
+                  <p className="mt-1.5 text-sm text-destructive">Enter a username.</p>
+                )}
+              </div>
 
               <div>
                 <Label htmlFor="reg-email" className="mb-1.5" required>

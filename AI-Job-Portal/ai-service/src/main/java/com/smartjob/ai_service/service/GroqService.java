@@ -152,13 +152,26 @@ public class GroqService {
                 6. Evaluate experience relevance.
                 7. Evaluate education relevance.
                 8. Give scores from 0 to 100.
+                   Each score must be a whole-number JSON integer, never a string or decimal.
                 9. Give a recommendation:
                    - STRONG_MATCH: highly suitable
                    - GOOD_MATCH: reasonably suitable
                    - WEAK_MATCH: significant gaps
                 10. Keep reasoning concise and factual.
 
-                Return the requested structured result.
+                Return one JSON object only, with every field below present and spelled exactly
+                as shown. Do not use markdown, omit fields, or add any other fields:
+                {
+                  "matchScore": 0,
+                  "skillsScore": 0,
+                  "experienceScore": 0,
+                  "educationScore": 0,
+                  "recommendation": "WEAK_MATCH",
+                  "extractedSkills": [],
+                  "matchedSkills": [],
+                  "missingSkills": [],
+                  "reasoning": "Brief evidence-based explanation"
+                }
                 """.formatted(jobTitle, jobDescription, experienceRequired, resumeText);
     }
 

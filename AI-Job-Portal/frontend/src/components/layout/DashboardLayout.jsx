@@ -104,7 +104,7 @@ export function DashboardLayout() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const location = useLocation()
-  const { role, email, profile, profileLoaded, userId } = useAuth()
+  const { role, email, username, profile, profileLoaded, userId } = useAuth()
   const unreadCount = useSelector(selectUnreadCount)
 
   const items = NAV_BY_ROLE[role] || NAV_BY_ROLE[ROLES.JOB_SEEKER]
@@ -134,7 +134,7 @@ export function DashboardLayout() {
   }
 
   const displayName =
-    [profile?.firstName, profile?.lastName].filter(Boolean).join(' ') || email || 'Account'
+    username || [profile?.firstName, profile?.lastName].filter(Boolean).join(' ') || email || 'Account'
 
   return (
     <div className="min-h-screen bg-muted/40">
@@ -234,7 +234,11 @@ export function DashboardLayout() {
                   size="sm"
                   src={profile?.profileImageUrl}
                   name={displayName}
-                  initials={initialsFrom(profile?.firstName, profile?.lastName) || 'U'}
+                  initials={
+                    initialsFrom(username) ||
+                    initialsFrom(profile?.firstName, profile?.lastName) ||
+                    'U'
+                  }
                 />
                 <span className="hidden max-w-[10rem] truncate text-sm font-medium sm:block">
                   {displayName}

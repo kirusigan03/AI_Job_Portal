@@ -195,7 +195,6 @@ disabled under `prefers-reduced-motion`.
 
 ## Full stack with Docker Compose
 
-The frontend is included in docker-compose.full.yml and served at http://localhost:5173. Run docker compose -f docker-compose.yml -f docker-compose.full.yml up --build after building the backend jars. The browser sends API requests to the gateway on localhost:8080.
+The frontend is included in the root Docker Compose stack and served at http://localhost:5173. From the repository root, run `docker compose up --build`; the browser sends API requests to the gateway on localhost:8080.
 
 Registration now collects a first and last name and creates the user profile after signing in. For accounts created earlier, a profile GET can return 404 until the user opens Profile and creates one.
-

@@ -5,6 +5,10 @@ on:
     branches: [main, develop]
   pull_request:
     branches: [main, develop]
+  workflow_call:
+
+permissions:
+  contents: read
 
 jobs:
   build:
@@ -25,6 +29,37 @@ jobs:
           - ai-service
           - notification-service
 
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: ci_db
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: test_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d ci_db"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+      kafka:
+        image: apache/kafka:3.9.1
+        ports:
+          - 9092:9092
+        env:
+          KAFKA_NODE_ID: 1
+          KAFKA_PROCESS_ROLES: broker,controller
+          KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+          KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+          KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+          KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+          KAFKA_CONTROLLER_QUORUM_VOTERS: 1@localhost:9093
+          KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+          KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+          KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+          KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -36,11 +71,19 @@ jobs:
           java-version: '21'
           cache: maven
 
+      - name: Wait for Kafka
+        run: |
+          for attempt in {1..30}; do
+            if bash -c 'echo > /dev/tcp/localhost/9092' 2>/dev/null; then
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Kafka did not become ready in time" >&2
+          exit 1
+
       - name: Build and test ${{ matrix.service }}
         working-directory: ${{ matrix.service }}
-        # These are the placeholder values CI needs to let the Spring
-        # context load; real secrets stay in each developer's local .env
-        # and in whatever secret store production actually uses.
         env:
           DB_PASSWORD: test_password
           JWT_SECRET: test_jwt_secret_for_ci_only_not_for_prod_1234567890
@@ -48,4 +91,32 @@ jobs:
           GROQ_API_KEY: test_groq_key
           MAIL_USERNAME: test@example.com
           MAIL_PASSWORD: test_mail_password
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/ci_db
+          SPRING_KAFKA_BOOTSTRAP_SERVERS: localhost:9092
+          EUREKA_CLIENT_ENABLED: 'false'
         run: mvn -B clean verify
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Lint
+        working-directory: frontend
+        run: npm run lint
+
+      - name: Build
+        working-directory: frontend
+        run: npm run build

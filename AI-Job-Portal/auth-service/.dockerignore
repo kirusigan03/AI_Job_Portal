@@ -1,0 +1,5 @@
+src
+pom.xml
+*.log
+target/*
+!target/*.jar

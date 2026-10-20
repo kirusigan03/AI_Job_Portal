@@ -34,6 +34,11 @@ public class AuthService {
             return "Email already registered";
         }
 
+        String username = request.getUsername().trim();
+        if (userRepository.existsByUsernameIgnoreCase(username)) {
+            throw new BadRequestException("Username already taken");
+        }
+
         Role role;
 
         try {
@@ -60,6 +65,7 @@ public class AuthService {
                 passwordEncoder.encode(request.getPassword());
 
         User user = new User(
+                username,
                 request.getEmail(),
                 encryptedPassword,
                 role
@@ -95,10 +101,16 @@ public class AuthService {
                 user.getRole().name()
         );
 
+        String username = user.getUsername();
+        if (username == null || username.isBlank()) {
+            username = user.getEmail().substring(0, user.getEmail().indexOf('@'));
+        }
+
         return new LoginResponse(
                 token,
                 user.getId(),
                 user.getEmail(),
+                username,
                 user.getRole().name()
         );
     }
