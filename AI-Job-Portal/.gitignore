@@ -1,6 +1,7 @@
 # Local environment variables - never commit real secrets
 .env
-.env.local
+.env.*
+!.env.example
 
 ### Maven ###
 target/
