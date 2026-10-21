@@ -5,7 +5,7 @@ import path from 'path'
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), 'VITE_')
 
-  if (command === 'build' && mode === 'production') {
+  if (command === 'build' && mode === 'production' && env.VITE_API_BASE_URL?.trim()) {
     const apiUrl = env.VITE_API_BASE_URL?.trim()
     let parsedUrl
 
@@ -13,7 +13,7 @@ export default defineConfig(({ command, mode }) => {
       parsedUrl = new URL(apiUrl)
     } catch {
       throw new Error(
-        'Set VITE_API_BASE_URL to the public HTTPS API gateway URL before building for production.',
+        'VITE_API_BASE_URL must be a public HTTPS API gateway URL when configured for production.',
       )
     }
 

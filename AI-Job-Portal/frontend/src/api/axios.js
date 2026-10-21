@@ -12,9 +12,9 @@ function resolveApiBaseUrl() {
   }
 
   if (!configuredUrl) {
-    throw new Error(
-      'VITE_API_BASE_URL must be set to the public HTTPS API gateway URL for production.',
-    )
+    // Let the static frontend render before its backend has been deployed.
+    // API calls will use the current origin until a gateway URL is configured.
+    return ''
   }
 
   let parsedUrl
@@ -88,6 +88,9 @@ export function getErrorMessage(error, fallback = 'Something went wrong. Try aga
   }
 
   if (error.message === 'Network Error') {
+    if (!API_BASE_URL) {
+      return 'The API backend is not configured yet. Please try again after it has been deployed.'
+    }
     return 'Cannot reach the API gateway at ' + API_BASE_URL + '. Is the backend running?'
   }
 

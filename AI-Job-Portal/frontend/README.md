@@ -33,7 +33,9 @@ VITE_API_BASE_URL=http://localhost:8080
 ```
 
 `VITE_API_BASE_URL` defaults to `http://localhost:8080` only in Vite development mode.
-Production builds require an explicitly configured public HTTPS API URL and reject localhost.
+Production builds can run without this setting so the static pages load before a backend is
+deployed. API requests will not work until a gateway is available. When configured, production
+requires a public HTTPS API URL and rejects localhost.
 
 No JWT secret, database credential, OpenAI key or internal service key appears anywhere in this
 project. The frontend only ever holds the token the login endpoint hands back.
@@ -205,9 +207,9 @@ Registration now collects a first and last name and creates the user profile aft
 
 ## Deploying the frontend to Vercel
 
-Set the Vercel project root directory to `frontend`, the build command to `npm run build`, and
+Set the Vercel project root directory to `AI-Job-Portal/frontend`, the build command to `npm run build`, and
 the output directory to `dist`. Add `VITE_API_BASE_URL` to the Vercel Production environment
-with the public HTTPS URL of the deployed API Gateway (for example,
+after the backend is deployed, with the public HTTPS URL of the API Gateway (for example,
 `https://<your-api-host>`). Do not use `localhost` or a private address. Vite embeds this value
 at build time, so redeploy after changing it. Do not put database passwords, JWT signing keys,
 Groq keys, or mail credentials in Vercel frontend variables.
