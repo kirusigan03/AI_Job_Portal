@@ -25,11 +25,15 @@ spring.cloud.gateway.server.webflux.globalcors.cors-configurations.[/**].allowed
 so the dev server is pinned with `strictPort: true`. If port 5173 is busy, Vite will fail loudly
 rather than silently start on 5174 and break every request with a CORS error.
 
-The gateway URL lives in `.env`:
+For local development, copy `.env.example` to `.env.local` inside `frontend`:
 
 ```
+Copy-Item .env.example .env.local
 VITE_API_BASE_URL=http://localhost:8080
 ```
+
+`VITE_API_BASE_URL` defaults to `http://localhost:8080` only in Vite development mode.
+Production builds require an explicitly configured public HTTPS API URL and reject localhost.
 
 No JWT secret, database credential, OpenAI key or internal service key appears anywhere in this
 project. The frontend only ever holds the token the login endpoint hands back.
@@ -198,3 +202,21 @@ disabled under `prefers-reduced-motion`.
 The frontend is included in the root Docker Compose stack and served at http://localhost:5173. From the repository root, run `docker compose up --build`; the browser sends API requests to the gateway on localhost:8080.
 
 Registration now collects a first and last name and creates the user profile after signing in. For accounts created earlier, a profile GET can return 404 until the user opens Profile and creates one.
+
+## Deploying the frontend to Vercel
+
+Set the Vercel project root directory to `frontend`, the build command to `npm run build`, and
+the output directory to `dist`. Add `VITE_API_BASE_URL` to the Vercel Production environment
+with the public HTTPS URL of the deployed API Gateway (for example,
+`https://<your-api-host>`). Do not use `localhost` or a private address. Vite embeds this value
+at build time, so redeploy after changing it. Do not put database passwords, JWT signing keys,
+Groq keys, or mail credentials in Vercel frontend variables.
+
+On the API Gateway host, set `CORS_ALLOWED_ORIGINS` to the exact comma-separated origins that
+should call the API, such as `http://localhost:5173,https://<your-project>.vercel.app`. Replace
+the Vercel placeholder with the actual production origin. The gateway allows the frontend's
+bearer-token `Authorization` header and does not enable cookie credentials.
+
+`vercel.json` rewrites only the current React routes to `index.html`; it does not rewrite `/api`
+requests or missing static assets. API calls use the external gateway URL from
+`VITE_API_BASE_URL`, so the backend must be deployed and publicly reachable separately.

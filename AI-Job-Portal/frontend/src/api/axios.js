@@ -4,8 +4,40 @@ import axios from 'axios'
  * The API Gateway is the only backend origin the frontend talks to.
  * Individual microservices are never called directly.
  */
-export const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080'
+function resolveApiBaseUrl() {
+  const configuredUrl = import.meta.env.VITE_API_BASE_URL?.trim()
+
+  if (!import.meta.env.PROD) {
+    return configuredUrl || 'http://localhost:8080'
+  }
+
+  if (!configuredUrl) {
+    throw new Error(
+      'VITE_API_BASE_URL must be set to the public HTTPS API gateway URL for production.',
+    )
+  }
+
+  let parsedUrl
+  try {
+    parsedUrl = new URL(configuredUrl)
+  } catch {
+    throw new Error('VITE_API_BASE_URL must be an absolute HTTPS URL in production.')
+  }
+
+  const hostname = parsedUrl.hostname.toLowerCase()
+  const isLoopback =
+    hostname === 'localhost' || hostname === '[::1]' || /^127\./.test(hostname)
+
+  if (parsedUrl.protocol !== 'https:' || isLoopback) {
+    throw new Error(
+      'VITE_API_BASE_URL must use HTTPS and must not point to localhost in production.',
+    )
+  }
+
+  return configuredUrl.replace(/\/+$/, '')
+}
+
+export const API_BASE_URL = resolveApiBaseUrl()
 
 const api = axios.create({
   baseURL: API_BASE_URL,

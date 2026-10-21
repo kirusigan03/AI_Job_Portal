@@ -1,6 +1,8 @@
 FROM node:22-alpine AS build
 
-ARG VITE_API_BASE_URL=http://localhost:8080
+# Set this build argument explicitly: use localhost only for a local image,
+# and a public HTTPS API gateway URL for a hosted image.
+ARG VITE_API_BASE_URL
 ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
 
 WORKDIR /app
