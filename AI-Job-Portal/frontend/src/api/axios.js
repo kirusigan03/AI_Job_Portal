@@ -95,10 +95,17 @@ export function getErrorMessage(error, fallback = 'Something went wrong. Try aga
   }
 
   const data = error?.response?.data
+  const asText = (value) => {
+    if (typeof value === 'string' && value.trim()) return value
+    if (value && typeof value === 'object') {
+      if (typeof value.message === 'string' && value.message.trim()) return value.message
+      if (typeof value.error === 'string' && value.error.trim()) return value.error
+    }
+    return null
+  }
 
-  if (typeof data === 'string' && data.trim()) return data
-  if (data?.message) return data.message
-  if (data?.error) return data.error
+  const responseMessage = asText(data) || asText(data?.message) || asText(data?.error)
+  if (responseMessage) return responseMessage
 
   // Spring validation errors arrive as a field -> message map.
   if (data && typeof data === 'object') {
@@ -106,7 +113,7 @@ export function getErrorMessage(error, fallback = 'Something went wrong. Try aga
     if (first) return first
   }
 
-  return error.message || fallback
+  return typeof error.message === 'string' && error.message.trim() ? error.message : fallback
 }
 
 export default api
