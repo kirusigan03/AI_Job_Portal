@@ -1,346 +1,496 @@
- 
-<div align="center">
+ <div align="center">
 
-  <img src="AI-Job-Portal/frontend/public/favicon.svg" alt="SmartJob Logo" width="88" height="88" />
+  <img src="AI-Job-Portal/frontend/public/favicon.svg" alt="SmartJob logo" width="88" height="88" />
 
-  # SmartJob — AI-Powered Job Portal
+# SmartJob — AI-Powered Job Portal
 
-  **An Intelligent, Microservices-Based Recruitment Platform**
+A role-based recruitment platform built with React and Spring Boot microservices, featuring AI-assisted candidate evaluation, event-driven notifications, and resume analysis.
 
-  A role-based recruitment platform built with React and Spring Boot microservices, featuring AI-assisted candidate evaluation, resume parsing, and real-time application tracking.
+**🌐 [Live Demo — SmartJob](https://ai-job-portal-kirusigan.vercel.app/)**
 
-  [🌐 Live Demo](https://ai-job-portal-kirusigan.vercel.app/) · [💻 GitHub Repository](https://github.com/kirusigan03/AI_Job_Portal)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel-black?logo=vercel)](https://ai-job-portal-kirusigan.vercel.app/)
+[![Backend](https://img.shields.io/badge/Backend-AWS%20EC2-orange?logo=amazonec2)](https://aws.amazon.com/ec2/)
+[![API Tunnel](https://img.shields.io/badge/API-Cloudflare%20Tunnel-orange?logo=cloudflare)](https://ears-saturn-tourism-sur.trycloudflare.com)
 
 </div>
 
 ---
 
-## 🚀 Live Deployment
+## Table of Contents
 
-| Component | Platform | Link |
-|---|---|---|
-| Frontend | Vercel | [Open SmartJob](https://ai-job-portal-kirusigan.vercel.app/) |
-| Backend | AWS EC2 | Connected through Cloudflare Tunnel |
-| API Gateway | AWS EC2 + Cloudflare Tunnel | [Backend API Tunnel](https://ears-saturn-tourism-sur.trycloudflare.com) |
-| Database | PostgreSQL | Private Docker network |
-| Messaging | Apache Kafka | Private Docker network |
+- [Overview](#overview)
+- [Live Deployment](#live-deployment)
+- [Key Features](#key-features)
+- [Technology Stack](#technology-stack)
+- [System Architecture](#system-architecture)
+- [Service Catalogue](#service-catalogue)
+- [Application Workflow](#application-workflow)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+- [API Overview](#api-overview)
+- [Security Model](#security-model)
+- [Quality Checks](#quality-checks)
+- [Troubleshooting](#troubleshooting)
+- [Contributing](#contributing)
 
-**Note:** The Cloudflare Quick Tunnel URL is temporary and may change when the tunnel restarts. If it changes, update the frontend's `VITE_API_BASE_URL` environment variable in Vercel and redeploy the frontend.
+## Overview
 
----
+SmartJob connects job seekers, employers, and administrators through a responsive web application.
 
-## 📌 Overview
+The backend is split into independently focused microservices discovered through Eureka, configured centrally through Spring Cloud Config, and exposed through a single API Gateway.
 
-SmartJob is an AI-powered recruitment platform designed to streamline the hiring process for candidates and recruiters. It uses a microservices architecture to separate authentication, user management, job management, resume processing, applications, AI evaluation, and notifications.
+Applications trigger Kafka events that power AI evaluation and in-app/email notifications without blocking the primary request.
 
-The frontend is deployed on Vercel, while the backend microservices run on AWS EC2 using Docker Compose.
+### Project Highlights
 
-### Key Highlights
-
-- Role-based authentication and authorization.
-- Job discovery and job application management.
-- Resume upload and parsing.
-- AI-assisted candidate evaluation.
-- Application status tracking.
+- Role-based recruitment platform for job seekers, employers, and administrators.
+- Spring Boot microservices with centralized configuration and service discovery.
+- AI-assisted candidate evaluation using resume and job-description analysis.
 - Event-driven communication using Apache Kafka.
-- Centralized API access through Spring Cloud Gateway.
-- Service discovery with Netflix Eureka.
-- Containerized backend deployment using Docker Compose.
+- JWT authentication and role-based authorization.
+- PostgreSQL database-per-service isolation.
+- Docker Compose-based deployment on AWS EC2.
+- Vercel-hosted frontend with HTTPS API access through Cloudflare Quick Tunnel.
 
----
+## Live Deployment
 
-## ✨ Features
+SmartJob is deployed using **Vercel for the frontend and AWS EC2 for the backend**. Cloudflare Quick Tunnel provides temporary HTTPS connectivity between the frontend and the API Gateway.
 
-### 👤 Authentication and User Management
-- Secure user authentication using JWT.
-- Role-based access for supported user types.
-- User profile management.
-- Protected API endpoints.
+### Live Application
 
-### 💼 Job Management
-- Browse available job opportunities.
-- Search and filter job listings.
-- Create and manage job postings for authorized users.
-- View job details and requirements.
+**Frontend — Vercel**
 
-### 📄 Resume Management
-- Upload resumes.
-- Extract resume content for processing.
-- Support document parsing using Apache PDFBox and Apache POI.
+**Production URL:** [https://ai-job-portal-kirusigan.vercel.app/](https://ai-job-portal-kirusigan.vercel.app/)
 
-### 🤖 AI-Powered Recruitment
-- AI-assisted candidate evaluation.
-- Resume and job requirement analysis.
-- Candidate evaluation support using the Groq API.
-- Configurable AI model through environment variables.
+Open the live application to explore SmartJob.
 
-### 📬 Application Management
-- Submit job applications.
-- Track application status.
-- Manage application-related workflows.
-- Publish application events through Kafka.
+The React and Vite frontend is deployed on Vercel.
 
-### 🔔 Notifications
-- Process application-related notification events.
-- Support event-driven communication between backend services.
+Verified during the deployment checks:
 
-### 🏗️ Microservices Architecture
-- Independent backend services.
-- Centralized configuration using Spring Cloud Config.
-- Service discovery using Netflix Eureka.
-- API routing through Spring Cloud Gateway.
-- Inter-service communication using OpenFeign and Spring Cloud LoadBalancer.
+- Production frontend returned `200 OK`.
+- User login worked with the deployed backend.
+- Job API requests were successful.
 
----
+### Backend — AWS EC2
 
-## 🛠️ Technology Stack
+**Hosting platform:** AWS EC2  
+**Region:** `ap-southeast-2` — Sydney  
+**Operating system:** Amazon Linux  
+**Containerization:** Docker and Docker Compose
 
-### Frontend
-- React 18
-- Vite
-- Redux Toolkit
-- React Router
-- Axios
-- Tailwind CSS
-- Lucide React
+The backend microservices and infrastructure run in Docker containers on EC2.
 
-### Backend
-- Java 21
-- Spring Boot
-- Spring Cloud
-- Spring Security
-- Spring Cloud Gateway
-- Spring Cloud Config
-- Netflix Eureka
-- OpenFeign
-- Spring Cloud LoadBalancer
-- JWT Authentication
+Services include:
 
-### Database and Messaging
-- PostgreSQL 17
+- API Gateway
+- Authentication Service
+- User Service
+- Job Service
+- Application Service
+- Resume Service
+- AI Service
+- Notification Service
+- Config Server
+- Eureka Server
+- PostgreSQL
 - Apache Kafka
 
-### AI and Document Processing
-- Groq API
-- Apache PDFBox
-- Apache POI
+### Deployment Architecture
 
-### DevOps and Deployment
-- Docker
-- Docker Compose
-- AWS EC2
-- Vercel
-- Cloudflare Tunnel
-- GitHub Actions
+```mermaid
+flowchart TD
+    U[User / Browser] --> FE[Vercel Frontend]
+    FE -->|HTTPS API Requests| CF[Cloudflare Quick Tunnel]
+    CF -->|Forward traffic| GW[API Gateway :8080]
 
----
+    subgraph EC2[AWS EC2 - Docker Compose]
+        GW --> AUTH[Auth Service]
+        GW --> USER[User Service]
+        GW --> JOB[Job Service]
+        GW --> APP[Application Service]
+        GW --> RES[Resume Service]
+        GW --> AI[AI Service]
+        GW --> NOTIF[Notification Service]
 
-## 🏛️ System Architecture
+        CFG[Config Server]
+        EUR[Eureka Server]
 
-```text
-                         ┌──────────────────────────┐
-                         │        User / Browser    │
-                         └────────────┬─────────────┘
-                                      │
-                                      ▼
-                         ┌──────────────────────────┐
-                         │    React + Vite Frontend │
-                         │          Vercel          │
-                         └────────────┬─────────────┘
-                                      │ HTTPS
-                                      ▼
-                         ┌──────────────────────────┐
-                         │    Cloudflare Tunnel     │
-                         └────────────┬─────────────┘
-                                      │
-                                      ▼
-                         ┌──────────────────────────┐
-                         │   Spring Cloud Gateway   │
-                         │         Port 8080        │
-                         └────────────┬─────────────┘
-                                      │
-              ┌───────────────────────┼───────────────────────┐
-              │                       │                       │
-              ▼                       ▼                       ▼
-      ┌───────────────┐       ┌───────────────┐       ┌───────────────┐
-      │ Auth Service  │       │ User Service  │       │ Job Service   │
-      │    :8081      │       │    :8082      │       │    :8083      │
-      └───────────────┘       └───────────────┘       └───────────────┘
-              │                       │                       │
-              └───────────────────────┼───────────────────────┘
-                                      │
-              ┌───────────────────────┼───────────────────────┐
-              │                       │                       │
-              ▼                       ▼                       ▼
-      ┌───────────────┐       ┌───────────────┐       ┌───────────────┐
-      │ Application   │       │ Resume        │       │ AI Service    │
-      │ Service :8084 │       │ Service :8085 │       │    :8087      │
-      └───────────────┘       └───────────────┘       └───────────────┘
-              │                       │                       │
-              └───────────────────────┼───────────────────────┘
-                                      │
-                         ┌────────────┴────────────┐
-                         │                          │
-                         ▼                          ▼
-                ┌────────────────┐        ┌────────────────┐
-                │   PostgreSQL   │        │  Apache Kafka  │
-                │ Private Network│        │ Private Network│
-                └────────────────┘        └────────────────┘
+        AUTH --> PG[(PostgreSQL)]
+        USER --> PG
+        JOB --> PG
+        APP --> PG
+        RES --> PG
+        AI --> PG
+        NOTIF --> PG
+
+        APP --> K[Apache Kafka]
+        K --> AI
+        K --> NOTIF
+    end
+
+    AI --> GROQ[Groq API]
+    NOTIF --> SMTP[Gmail SMTP]
 ```
 
-Supporting infrastructure:
+### Backend HTTPS API
 
-- **Config Server** — centralized configuration on port `8888`.
-- **Eureka Server** — service discovery dashboard on port `8761`.
-- **Notification Service** — processes notification-related events on port `8086`.
+The API Gateway is accessible through a Cloudflare Quick Tunnel.
 
----
+**Tunnel URL at the time of deployment:**
 
-## 🧩 Microservices
+`https://ears-saturn-tourism-sur.trycloudflare.com`
 
-| Service | Port | Responsibility |
+Example jobs endpoint:
+
+`https://ears-saturn-tourism-sur.trycloudflare.com/api/jobs`
+
+The `/api/jobs` endpoint returned `200 OK` during verification. The response was an empty array (`[]`) because no jobs were present in the database at that time.
+
+> **Important:** Cloudflare Quick Tunnel URLs are temporary. The URL above may no longer be active or may change when the tunnel is restarted.
+
+### AWS Network Security
+
+The deployment keeps internal infrastructure private.
+
+| Component | Port | Exposure |
 |---|---:|---|
-| API Gateway | `8080` | Centralized API routing |
-| Auth Service | `8081` | Authentication and token handling |
-| User Service | `8082` | User and profile management |
-| Job Service | `8083` | Job posting and discovery |
-| Application Service | `8084` | Job application workflows |
-| Resume Service | `8085` | Resume uploads and parsing |
-| Notification Service | `8086` | Application-related notifications |
-| AI Service | `8087` | AI-assisted candidate evaluation |
-| Config Server | `8888` | Centralized service configuration |
-| Eureka Server | `8761` | Service registration and discovery |
+| API Gateway | 8080 | Public application entry point |
+| PostgreSQL | 5432 | Private Docker network |
+| Apache Kafka | 9092 | Private Docker network |
+| Config Server | 8888 | Private Docker network |
+| Eureka Server | 8761 | Private Docker network |
 
-The PostgreSQL database and Kafka broker run inside the Docker network and are not intended to be exposed publicly.
+Only the API Gateway port was verified as listening publicly on the EC2 host during the deployment checks.
 
----
+PostgreSQL, Kafka, Config Server, and Eureka Server are not intended to be directly accessible from the public internet.
 
-## 🔄 Event-Driven Communication
+### Deployment Verification
 
-Apache Kafka supports asynchronous communication between services.
+The following checks were completed during deployment:
 
-The application uses the following event topics:
+| Check | Result at verification time |
+|---|---|
+| Vercel frontend | `200 OK` |
+| HTTPS API tunnel | Working |
+| Jobs endpoint | `200 OK` |
+| User login | Working |
+| PostgreSQL | Healthy |
+| Kafka | Running |
+| Backend microservices | Running |
+| Public application port | API Gateway only |
 
-- `application-submitted`
-- `application-status-changed`
-- `candidate-evaluated`
+These results describe the deployment verification performed at that time and do not guarantee current uptime.
 
-These events help decouple application workflows from downstream processing.
+### Deployment Limitations
 
----
+The current Cloudflare Quick Tunnel setup is suitable for development and demonstration purposes.
 
-## 📂 Project Structure
+- The temporary tunnel URL can change when a new tunnel is started.
+- API connectivity stops if the `cloudflared` process terminates.
+- If the URL changes, update `VITE_API_BASE_URL` in Vercel and redeploy the frontend.
+- A stable production deployment should use a custom domain and a persistent Cloudflare Tunnel configuration.
+- Keep database credentials, JWT secrets, internal service keys, and API keys private.
 
-```text
-AI_Job_Portal/
-└── AI-Job-Portal/
-    ├── frontend/
-    │   ├── public/
-    │   ├── src/
-    │   ├── package.json
-    │   └── vite.config.js
-    │
-    ├── config-server/
-    ├── eureka-server/
-    ├── auth-service/
-    ├── user-service/
-    ├── job-service/
-    ├── application-service/
-    ├── resume-service/
-    ├── notification-service/
-    ├── ai-service/
-    ├── api-gateway/
-    │
-    ├── docker/
-    ├── docker-compose.yml
-    ├── .env.example
-    └── README.md
+## Key Features
+
+### Job Seekers
+
+- Browse and filter jobs without signing in.
+- Maintain a personal profile.
+- Upload PDF or DOC/DOCX resumes up to 5 MB.
+- Apply for jobs and track application status.
+- View AI-generated match scores, skill gaps, strengths, and recommendations.
+- Receive application and evaluation notifications.
+
+### Employers
+
+- Create, update, publish, close, and delete job listings.
+- Review applications and candidate profiles.
+- Inspect resume-based AI evaluations and candidate rankings.
+- Move candidates through the recruitment lifecycle.
+
+### Administrators
+
+- Monitor platform-level users, jobs, and applications.
+- Access protected administrative dashboards and operations.
+
+### Platform Capabilities
+
+- JWT authentication with `JOB_SEEKER`, `EMPLOYER`, and `ADMIN` authorization.
+- Service discovery and centralized configuration.
+- Kafka-based asynchronous processing for submissions, status changes, and AI results.
+- Groq API integration for structured candidate evaluation.
+- PostgreSQL database-per-service isolation.
+- Gmail SMTP support for outbound email notifications.
+- Health and diagnostic endpoints through Spring Boot Actuator.
+
+## Technology Stack
+
+<div align="center">
+
+  <img src="https://skillicons.dev/icons?i=java,spring,react,redux,vite,tailwind,postgres,kafka,docker,maven,git,github&perline=12" alt="Java, Spring, React, Redux, Vite, Tailwind CSS, PostgreSQL, Kafka, Docker, Maven, Git, and GitHub" />
+
+</div>
+
+| Layer | Technologies |
+|---|---|
+| Frontend | React 18, Vite 5, React Router, Redux Toolkit, Axios, Tailwind CSS, Lucide React |
+| Backend | Java 21, Spring Boot 4.1.1, Spring MVC/WebFlux, Spring Security, Spring Data JPA |
+| Cloud | Spring Cloud Config, Netflix Eureka, Spring Cloud Gateway, OpenFeign, LoadBalancer |
+| Messaging | Apache Kafka, Spring Kafka |
+| Data | PostgreSQL 17, Hibernate/JPA |
+| AI | Groq Chat Completions API (`openai/gpt-oss-20b` by default) |
+| Documents | Apache PDFBox, Apache POI |
+| Security | JWT (`jjwt`), role-based access control, internal service key |
+| DevOps | Docker, Docker Compose, Maven Wrapper, GitHub Actions |
+| Hosting | Vercel, AWS EC2, Cloudflare Quick Tunnel |
+
+## System Architecture
+
+```mermaid
+flowchart LR
+    U[Job Seeker / Employer / Admin] --> FE[React + Vite SPA]
+    FE -->|REST + JWT| GW[API Gateway :8080]
+
+    CS[Config Server :8888] -. Central Configuration .-> GW
+    CS -. Central Configuration .-> MS[Domain Services]
+
+    EU[Eureka Server :8761] <-. Registration and Discovery .-> GW
+    EU <-. Registration and Discovery .-> MS
+
+    GW --> AU[Auth :8081]
+    GW --> US[User :8082]
+    GW --> JS[Job :8083]
+    GW --> AS[Application :8084]
+    GW --> RS[Resume :8085]
+    GW --> NS[Notification :8086]
+    GW --> AI[AI :8087]
+
+    AU --> PG[(PostgreSQL)]
+    US --> PG
+    JS --> PG
+    AS --> PG
+    RS --> PG
+    NS --> PG
+    AI --> PG
+
+    AS -->|Application Events| K[Apache Kafka]
+    K --> AI
+    K --> NS
+    AI -->|Evaluation Event| K
+
+    AI -->|Internal API| JS
+    AI -->|Internal API| RS
+    AI --> GROQ[Groq API]
+    NS -->|Internal API| US
+    NS --> SMTP[Gmail SMTP]
 ```
 
-*Note: The exact structure may vary depending on the current repository version.*
+### Service Catalogue
 
----
+| Service | Port | Responsibility | Database |
+|---|---:|---|---|
+| API Gateway | 8080 | Public entry point, routing, CORS, load-balanced access | — |
+| Auth Service | 8081 | Registration, login, password hashing, JWT issuance | `auth_db` |
+| User Service | 8082 | Candidate/employer profiles and internal user lookup | `user_db` |
+| Job Service | 8083 | Job lifecycle, search, employer listings | `job_db` |
+| Application Service | 8084 | Applications, status tracking, Kafka event production | `application_db` |
+| Resume Service | 8085 | Resume uploads, storage, document text extraction | `resume_db` |
+| Notification Service | 8086 | In-app notifications, event consumption, email delivery | `notification_db` |
+| AI Service | 8087 | Resume/job matching, scoring, Groq integration | `ai_db` |
+| Config Server | 8888 | Centralized configuration | — |
+| Eureka Server | 8761 | Service registration and discovery | — |
 
-## ⚙️ Getting Started
+## Application Workflow
+
+```mermaid
+sequenceDiagram
+    actor Candidate
+    participant UI as React UI
+    participant Gateway as API Gateway
+    participant App as Application Service
+    participant Kafka
+    participant AI as AI Service
+    participant Resume as Resume Service
+    participant Job as Job Service
+    participant Groq
+    participant Notify as Notification Service
+
+    Candidate->>UI: Select job and resume
+    UI->>Gateway: POST /api/applications (JWT)
+    Gateway->>App: Route request
+    App->>App: Validate and persist application
+    App-->>Kafka: application-submitted
+    App-->>UI: Application created
+
+    Kafka-->>AI: Consume submission event
+
+    par Gather evaluation context
+        AI->>Resume: Fetch extracted resume data
+        AI->>Job: Fetch job requirements
+    end
+
+    AI->>Groq: Request structured evaluation
+    Groq-->>AI: Score, skills, gaps, recommendation
+    AI->>AI: Validate and store result
+    AI-->>Kafka: candidate-evaluated
+
+    Kafka-->>Notify: Consume application/evaluation events
+    Notify->>Notify: Save in-app notification
+    Notify-->>Candidate: Optional email notification
+
+    UI->>Gateway: GET /api/ai/applications/{id}
+    Gateway->>AI: Fetch evaluation
+    AI-->>UI: Analysis result
+```
+
+### Kafka Topics
+
+- `application-submitted` — starts AI evaluation and submission notifications.
+- `application-status-changed` — informs candidates about recruitment progress.
+- `candidate-evaluated` — announces completion of the AI assessment.
+
+## Project Structure
+
+```text
+AI-Job-Portal/
+├── frontend/                 React/Vite single-page application
+├── api-gateway/              External API entry point
+├── config-server/            Central configuration
+├── eureka-server/            Service registry
+├── auth-service/             Identity and JWT authentication
+├── user-service/             User profiles
+├── job-service/              Job catalogue and management
+├── application-service/      Applications and workflow events
+├── resume-service/           Uploads and text extraction
+├── ai-service/               AI candidate evaluation
+├── notification-service/     In-app and email notifications
+├── docker/
+│   └── postgres/
+│       └── init.sql          Database bootstrap script
+├── docker-compose.yml        PostgreSQL and Kafka infrastructure
+├── docker-compose.full.yml   Application container definitions
+├── .env.example              Environment variable template
+└── .github/
+    └── workflows/            Backend CI workflows
+```
+
+## Getting Started
 
 ### Prerequisites
 
-Install the following tools before running the project locally:
-
-- Git
-- Java 21
-- Node.js and npm
-- Docker Desktop or Docker Engine
-- Docker Compose
+- Java 21+
+- Maven 3.9+ or the included Maven Wrapper
+- Node.js 20+ and npm
+- Docker Desktop with Docker Compose
+- A Groq API key for live AI evaluations
+- Optional: Gmail account with an App Password for email delivery
 
 ### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/kirusigan03/AI_Job_Portal.git
-cd AI_Job_Portal/AI-Job-Portal
+cd AI_Job_Portal
+cd AI-Job-Portal
 ```
 
 ### 2. Configure Environment Variables
 
-Copy the example environment file:
+Copy the example environment file.
+
+**Linux/macOS:**
 
 ```bash
 cp .env.example .env
 ```
 
-On Windows PowerShell:
+**Windows PowerShell:**
 
 ```powershell
 Copy-Item .env.example .env
 ```
 
-Update `.env` with your own configuration.
-
-Typical variables include:
+Configure the values in `.env` according to the settings required by your local environment.
 
 ```env
-DB_PASSWORD=your_database_password
-JWT_SECRET=your_secure_jwt_secret
-INTERNAL_SERVICE_KEY=your_internal_service_key
-
+DB_PASSWORD=your_local_postgres_password
+JWT_SECRET=your_long_random_signing_secret
+INTERNAL_SERVICE_KEY=your_separate_random_service_secret
 GROQ_API_KEY=your_groq_api_key
 GROQ_MODEL=openai/gpt-oss-20b
-
-MAIL_USERNAME=your_email
-MAIL_PASSWORD=your_email_app_password
+MAIL_USERNAME=your_email@gmail.com
+MAIL_PASSWORD=your_gmail_app_password
 ```
 
-Use values that match the project's actual configuration. Never commit `.env` or publish passwords, API keys, JWT secrets, or email credentials.
+Use the variable names and any additional required settings from the repository's `.env.example`.
 
-### 3. Start the Backend
+> Never commit `.env`, production credentials, uploaded resumes, or real candidate data.
 
-From the directory containing `docker-compose.yml`, run:
-
-```bash
-docker compose up --build -d
-```
-
-Check the running containers:
+### 3. Start Infrastructure
 
 ```bash
+docker compose up -d
 docker compose ps
 ```
 
-View service logs:
+This starts PostgreSQL and Kafka as defined in the infrastructure Compose file.
+
+The PostgreSQL initialization script creates the service databases on the first initialization, according to the configured setup.
+
+### 4. Start the Backend
+
+Start Config Server and Eureka Server first. Wait for them to become healthy before starting the remaining services.
+
+Run each command from the project root in a separate terminal.
+
+**Linux/macOS:**
 
 ```bash
-docker compose logs -f
+cd config-server && ./mvnw spring-boot:run
 ```
-
-To inspect a particular service:
 
 ```bash
-docker compose logs -f api-gateway
+cd eureka-server && ./mvnw spring-boot:run
 ```
 
-### 4. Start the Frontend Locally
+```bash
+cd auth-service && ./mvnw spring-boot:run
+```
 
-Open a separate terminal:
+```bash
+cd user-service && ./mvnw spring-boot:run
+```
+
+```bash
+cd job-service && ./mvnw spring-boot:run
+```
+
+```bash
+cd application-service && ./mvnw spring-boot:run
+```
+
+```bash
+cd resume-service && ./mvnw spring-boot:run
+```
+
+```bash
+cd notification-service && ./mvnw spring-boot:run
+```
+
+```bash
+cd ai-service && ./mvnw spring-boot:run
+```
+
+```bash
+cd api-gateway && ./mvnw spring-boot:run
+```
+
+Each command assumes it is executed from the project root. If you are already inside a service directory, run only that service's Maven Wrapper command.
+
+**Windows:** use the corresponding `mvnw.cmd` wrapper in each service directory.
+
+### 5. Start the Frontend
 
 ```bash
 cd frontend
@@ -348,182 +498,154 @@ npm install
 npm run dev
 ```
 
-Open the local frontend:
+Open the application:
 
-```text
-http://localhost:5173
+[http://localhost:5173](http://localhost:5173)
+
+The local API Gateway is expected at:
+
+[http://localhost:8080](http://localhost:8080)
+
+The Eureka dashboard is expected at:
+
+[http://localhost:8761](http://localhost:8761)
+
+These local URLs apply to a developer-mode setup with the relevant services running locally.
+
+### Full Container Build
+
+The `docker-compose.full.yml` file defines the application containers.
+
+Build the backend JARs before starting the application containers. For example:
+
+```bash
+./mvnw -f auth-service/pom.xml clean package -DskipTests
 ```
 
-Make sure the frontend API base URL is configured for your local backend when running locally.
+Repeat for each backend service and configuration module that requires a JAR.
 
----
+Then start the Compose configuration:
 
-## 🌐 Deployment Configuration
-
-### Frontend — Vercel
-
-The frontend is deployed on Vercel.
-
-**Live application:** https://ai-job-portal-kirusigan.vercel.app/
-
-Configure the frontend's API base URL in the Vercel project environment variables:
-
-```env
-VITE_API_BASE_URL=your_backend_api_base_url
+```bash
+docker compose -f docker-compose.yml -f docker-compose.full.yml up --build
 ```
 
-Use the currently active backend URL and the format expected by the frontend code. Redeploy the frontend after changing environment variables.
+> The checked-in centralized configuration may use `localhost` addresses for developer-mode execution. For a fully containerized deployment, configure a container-specific profile or override using Compose DNS names such as `postgres`, `kafka`, `config-server`, and `eureka-server`, as appropriate to the service configuration.
 
-### Backend — AWS EC2
+## API Overview
 
-The backend microservices run on an AWS EC2 instance using Docker Compose.
+All browser-facing API requests should use the API Gateway base URL.
 
-Deployment components include:
+**Local development:**
 
-- Amazon Linux
-- Docker Engine
-- Docker Compose
-- Spring Boot microservices
-- PostgreSQL
-- Apache Kafka
+`http://localhost:8080`
 
-### Cloudflare Tunnel
+**Deployed frontend:**
 
-Cloudflare Tunnel provides an HTTPS endpoint for reaching the backend API Gateway without directly publishing the internal services.
+[https://ai-job-portal-kirusigan.vercel.app/](https://ai-job-portal-kirusigan.vercel.app/)
 
-**Current tunnel URL:** https://ears-saturn-tourism-sur.trycloudflare.com
+**Deployed API Gateway (temporary tunnel):**
 
-Quick Tunnels are temporary and are intended for development or testing. For a stable production deployment, configure a persistent Cloudflare Tunnel with a domain you control.
+`https://ears-saturn-tourism-sur.trycloudflare.com`
 
-### Network Security
+The deployed frontend uses the configured `VITE_API_BASE_URL` to reach the backend.
 
-- Expose only the required public entry point.
-- Keep PostgreSQL and Kafka private.
-- Do not expose Config Server or Eureka publicly unless there is a specific, secured operational requirement.
-- Store secrets in environment variables or a suitable secrets manager.
-- Use HTTPS for external application traffic.
+| Area | Base Path | Representative Operations |
+|---|---|---|
+| Authentication | `/api/auth` | Register, login |
+| Users | `/api/users` | Create/read/update/delete profiles, admin user listing |
+| Jobs | `/api/jobs` | Browse, search, create, update status, delete |
+| Applications | `/api/applications` | Apply, view applications, update status |
+| Resumes | `/api/resumes` | Upload, list, retrieve, delete |
+| AI Analysis | `/api/ai` | Fetch analysis by application or resume |
+| Notifications | `/api/notifications` | List notifications, mark as read |
 
----
+Protected endpoints expect a JWT bearer token.
 
-## 🔌 API Overview
+```http
+Authorization: Bearer <jwt-token>
+```
 
-The frontend communicates with the backend through the API Gateway.
+Internal `/internal/**` endpoints are intended for service-to-service communication and should use the configured internal service authentication mechanism rather than public routing.
 
-| API area | Purpose |
+## Security Model
+
+```mermaid
+flowchart LR
+    C[User Credentials] --> A[Auth Service]
+    A -->|Signed JWT with Role| UI[Frontend]
+    UI -->|Bearer Token| G[API Gateway]
+    G --> S[Domain Service]
+    S --> R{Authorized?}
+    R -->|Yes| OK[Process Request]
+    R -->|No| DENY[401 / 403]
+```
+
+### Security Features
+
+- Passwords are handled using Spring Security and are not returned by APIs.
+- JWT signing uses the configured `JWT_SECRET`.
+- Role-based access control distinguishes `JOB_SEEKER`, `EMPLOYER`, and `ADMIN`.
+- Frontend route guards improve navigation but are not a replacement for backend authorization.
+- Service-to-service requests use the configured internal service key.
+- Resume uploads are size-limited and restricted to supported document formats.
+- PostgreSQL and Kafka should remain on private networks.
+- Production deployments should use HTTPS, strong secrets, restricted security-group rules, and appropriate log and data-retention policies.
+
+## Quality Checks
+
+### Frontend
+
+```bash
+cd frontend
+npm run lint
+npm run build
+```
+
+### Backend
+
+Run the test suite for an individual service.
+
+```bash
+cd ai-service
+./mvnw clean verify
+```
+
+Repeat for other services as needed.
+
+GitHub Actions is configured to run backend verification across the relevant modules on pushes and pull requests targeting `main` or `develop`, according to the repository workflow configuration.
+
+## Troubleshooting
+
+| Symptom | What to Check |
 |---|---|
-| Authentication | Registration, login, and token-related operations |
-| Users | User profiles and account management |
-| Jobs | Job discovery and job management |
-| Applications | Job application workflows |
-| Resumes | Resume upload and processing |
-| AI | AI-assisted candidate evaluation |
-| Notifications | Notification-related workflows |
+| Service cannot load configuration | Confirm Config Server is healthy and the service configuration is available. |
+| Gateway returns `503` | Confirm the target service is running, registered in Eureka, and listening on the configured port. |
+| Database connection fails | Verify Docker is running, `.env` has the correct password, and PostgreSQL initialization completed. |
+| Kafka events are not processed | Verify the broker, topic names, and AI/Notification consumer logs. |
+| AI result is missing | Verify `GROQ_API_KEY`, the configured model, resume text extraction, and AI service logs. |
+| Email is not sent | Verify Gmail App Password and mail configuration. In-app notifications may still work independently. |
+| Resume upload fails | Use a supported PDF, DOC, or DOCX file within the configured 5 MB limit. |
+| Deployed frontend cannot reach the backend | Verify `VITE_API_BASE_URL`, tunnel availability, CORS configuration, and API Gateway logs. |
+| Cloudflare tunnel URL no longer works | Check whether the Quick Tunnel process is running and whether the URL has changed. Update Vercel configuration if necessary. |
+| Login fails after deployment | Check the authentication service, backend logs, API URL, JWT configuration, and browser network errors. |
 
-The exact endpoint paths and HTTP methods depend on the controller mappings implemented in each service.
+## Contributing
 
----
-
-## 🧪 Testing and Quality
-
-The project can be tested using:
-
-- JUnit 5
-- Mockito
-- Spring Security Test
-- Postman
-- Frontend testing tools configured in the project
-
-Run backend tests from an individual Spring Boot service directory:
-
-```bash
-./mvnw test
-```
-
-On Windows:
-
-```powershell
-.\mvnw.cmd test
-```
-
-Run the frontend scripts configured in `frontend/package.json`:
-
-```bash
-npm run
-```
-
-Use the listed scripts to identify the available linting and testing commands. Test results depend on the environment and required services being available.
-
----
-
-## 🛡️ Security Considerations
-
-- Use JWT-based authentication and authorization.
-- Keep sensitive environment variables out of version control.
-- Restrict public access to backend infrastructure.
-- Keep database and messaging services on private networks.
-- Validate and sanitize user input.
-- Secure file upload and resume-processing workflows.
-- Configure CORS to allow only the intended frontend origins.
-- Avoid exposing internal service endpoints to the public internet.
-
----
-
-## 🧰 Troubleshooting
-
-### Frontend cannot connect to the backend
-
-1. Check that the backend services are running.
-2. Verify the API Gateway is reachable.
-3. Confirm that `VITE_API_BASE_URL` points to the correct backend URL.
-4. Check browser developer tools for CORS or network errors.
-5. Redeploy Vercel after changing environment variables.
-
-### Cloudflare Tunnel URL no longer works
-
-A Quick Tunnel URL may change or stop working when the tunnel process stops. Start the tunnel again, obtain its current URL, update the Vercel environment variable, and redeploy the frontend.
-
-### Backend services are not starting
-
-Check container status and logs:
-
-```bash
-docker compose ps
-docker compose logs --tail=100
-```
-
-### Database connection errors
-
-Verify that PostgreSQL is running, the database credentials match the environment configuration, and the backend services use the correct internal database hostname.
-
----
-
-## 🚧 Future Improvements
-
-- Configure a permanent custom domain and persistent Cloudflare Tunnel.
-- Add comprehensive automated testing.
-- Improve monitoring, centralized logging, and health checks.
-- Strengthen deployment automation.
-- Add production-grade secrets management and backup procedures.
-- Expand AI-assisted recruitment and candidate matching capabilities.
-
----
-
-## 👨‍💻 Author
-
-**Kirusigan Thevarasa**
-
-IT Undergraduate — University of Moratuwa
-
-- **Portfolio:** [kiruthiyan.me](https://kiruthiyan.me)
-- **GitHub:** [kirusigan03](https://github.com/kirusigan03)
-- **Live Project:** [SmartJob — AI-Powered Job Portal](https://ai-job-portal-kirusigan.vercel.app/)
+1. Create a feature branch from `develop`.
+2. Keep changes focused within the relevant service or frontend feature.
+3. Add or update tests and run the appropriate quality checks.
+4. Never include secrets, build output, IDE state, or candidate documents.
+5. Open a pull request describing behavior changes and verification performed.
 
 ---
 
 <div align="center">
 
-  **SmartJob — Making Recruitment Smarter with AI**
+Built as a scalable, event-driven recruitment platform with AI-assisted decision support.
 
-  Built with React, Spring Boot, PostgreSQL, Kafka, and AI.
+**Live Application:** [SmartJob — AI-Powered Job Portal](https://ai-job-portal-kirusigan.vercel.app/)
+
+**GitHub Repository:** [kirusigan03/AI_Job_Portal](https://github.com/kirusigan03/AI_Job_Portal)
 
 </div>
